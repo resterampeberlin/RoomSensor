@@ -1,33 +1,66 @@
-/*
- *  This sketch sends data via HTTP GET requests to data.sparkfun.com service.
- *
- *  You need to get streamId and privateKey at data.sparkfun.com and paste them
- *  below. Or just customize this script to talk to other HTTP servers.
- *
- */
+//!
+//! @file RoomSensor.ino
+//! @author Markus Nickels
+//! @version 0.0
+//!
+
+// This file is part of the Application "RoomSensor".
+//
+// RoomSensor is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// RoomSensor is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with RoomSensor.  If not, see <http://www.gnu.org/licenses/>.
  
 #include <ESP8266WiFi.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>   
 
+#include "Confidential.h"
+
 //#define SOL_PIN       2       // sign of life
 
-const char* ssid     = "OpenWrt";
-const char* password = "Kas!mir3efv";
+//!
+//! @name Server specific definitions
+//!
+//! Defined in Confidential.h 
+//!
+//!@{
+const char* ssid      = CONF_SSID;        //!< WLAN-Name
+const char* password  = CONF_PASSWORD;    //!< WLAN Password
+const char* host      = CONF_HOST;         //!< Server where the data is sent to
+//!@}
 
-const char* host = "192.168.0.4";
-
-//OneWire Setup
+// OneWire Setup, connect to GPIO 2
 OneWire oneWire(2);
 DallasTemperature sensors(&oneWire);
 
-#define OneWireAddressSize 8 
+#define OneWireAddressSize 8              //!< A 1-Wire address consists of 8 bytes
+
+//!
+//! @name structure, where the sensor configuration is stored
+//!
+//! This structure has to be carefully pre-initialised with the real
+//! HW-ID of the sensors. Look carefully to the output on the serial
+//! console to check the configuration
+//!
 
 typedef struct {
-  uint8_t sensorID;
-  boolean available;
-  uint8_t address[OneWireAddressSize];
+  uint8_t sensorID;                       //!< Sensor ID which corresponds to the sensorID in the database
+  boolean available;                      //!< Sensor available on bus
+  uint8_t address[OneWireAddressSize];    //!< Unique HW-ID of sensor
 } sensorInfo_t;
+
+//!
+//! @name configuration my sensors
+//!
 
 sensorInfo_t sensorInfo[] = {
   1, false, {0x28, 0xFF, 0x2A, 0x33, 0xA4, 0x15, 0x01, 0xE8},
@@ -36,7 +69,22 @@ sensorInfo_t sensorInfo[] = {
   4, false, {0x28, 0xFF, 0x96, 0x28, 0xA4, 0x15, 0x03, 0x96},
   5, false, {0x28, 0xFF, 0xCC, 0x67, 0xA4, 0x15, 0x04, 0x47} };
 
-int numSensors = 0;
+//!
+//! @name location ID of current capture
+//!
+//! This value must match the ID in the database, table "location" e.g.
+//!
+//! id | name
+//! -- | --------
+//! 1  | living room
+//! 2  | kitchen
+//!
+
+int const locationId = 1;
+
+//!
+//! @name Setup routine
+//!
 
 void setup() {
   //OneWire Sensor start working
@@ -117,7 +165,9 @@ void setup() {
   Serial.println("");
 }
 
-int const location = 1;
+//!
+//! @name main routine
+//!
 
 void loop() {
   float sensorValue = 0.0;
@@ -152,11 +202,11 @@ void loop() {
     }
     
     // We now create a URI for the request
-    String url = "/Smarthome/add_sensor_data.php";
-    url += "?location=";
-    url += location;
+    String url = "/Smarthome/addSensorData.php";
+    url += "?locationId=";
+    url += locationId;
     
-    url += "&sensor=";
+    url += "&sensorId=";
     url += sensorInfo[sensor].sensorID;
     
     url += "&value=";
@@ -199,4 +249,48 @@ void loop() {
 
   delay(1000 * 60);
 }
+
+//!
+//! @mainpage Store and show sensor data recored from a remote sensor
+//!
+//! @section Purpose
+//!
+//! This arduino application runs on en ESP8266, captures data from the sensors the one wire bus 
+//! and sends it to a MySQL server. This data can be used to be displayed in nice graphs
+//! A typical application will be to capture temperature data in a room
+//!
+//! @section Compatibility
+//!
+//! This is program has been tested with
+//! @li ESP8266
+//! @li Maxim DS18B20 digital temperature sensor
+//!
+//! @section Installation
+//!
+//! @subsection Sensor
+//!
+//! -# Refer to sketch RoomSensor.sch for wiring (wire GPIO2 to 1-wire bus with 4,7K pullup)
+//! -# Create file confidential.h in which you define host, WLAN name and password 
+//!    (see ::ssid, ::password, ::host)
+//! -# Define ::locationId in Roomsensor.ino
+//! -# Compile and load to ESP8266
+//! -# Connect the sensor one by one (after a reset) and remember unique HW-Id using the 
+//!    serial monitor
+//! -# Modify ::sensorInfo with the remembered values
+//! -# Compile and load again. Now all sensor should be marked as "found"
+//!
+//! @ssubection Server
+//!
+//! -# Install MySQL/MariaDb and PHP on server
+//! -# Install jpgraph library on server (see http://jpgraph.net)
+//! -# Create datebase Smarthome (See SmartHome.sql)
+//! -# modify tables sensor and location
+//! -# Install server scripts 
+//! -# Create file Confidential.php with user name and password for mysql server 
+//!    (see Smarthome.php)
+//!
+//! @section Credits
+//!
+//! Currently nobody
+//!
 
