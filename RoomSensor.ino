@@ -252,21 +252,23 @@ void loop() {
 //!
 //! @mainpage Store and show sensor data recored from a remote sensor
 //!
-//! @section Purpose
+//! @tableofcontents
+//!
+//! @section s1 Purpose
 //!
 //! This arduino application runs on en ESP8266, captures data from the sensors the one wire bus 
 //! and sends it to a MySQL server. This data can be used to be displayed in nice graphs
 //! A typical application will be to capture temperature data in a room
 //!
-//! @section Compatibility
+//! @section s2 Compatibility
 //!
 //! This is program has been tested with
 //! @li ESP8266
 //! @li Maxim DS18B20 digital temperature sensor
 //!
-//! @section Installation
+//! @section s3 Installation
 //!
-//! @subsection Sensor
+//! @subsection s3_1 Sensor
 //!
 //! -# Refer to sketch RoomSensor.sch for wiring (wire GPIO2 to 1-wire bus with 4,7K pullup)
 //! -# Create file confidential.h in which you define host, WLAN name and password 
@@ -278,7 +280,7 @@ void loop() {
 //! -# Modify #sensorInfo with the remembered values
 //! -# Compile and load again. Now all sensor should be marked as "found"
 //!
-//! @subsection Server
+//! @subsection s3_2 Server
 //!
 //! -# Install MySQL/MariaDb and PHP on server
 //! -# Install jpgraph library on server (see http://jpgraph.net)
@@ -288,16 +290,16 @@ void loop() {
 //! -# Create file Confidential.php with user name and password for mysql server 
 //!    (see Smarthome.php)
 //!
-//! @ Known bugs
+//! @section s4 Known bugs
 //!
 //! - Last measurement displayed incorrectly (it is not the last measurement)
 //! - no indication when selected date range does not contain any data
 //!
-//! @ To Do
+//! @section s5 To Do
 //!
 //! - selection of location in index.php
 //!
-//! @section Credits
+//! @section s6 Credits
 //!
 //! Currently nobody
 //!
