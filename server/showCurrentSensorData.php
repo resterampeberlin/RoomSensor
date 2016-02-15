@@ -1,6 +1,6 @@
 <?php
     //!
-    //! @file show_current_sensor_data.php
+    //! @file showCurrentSensorData.php
     //! @author Markus Nickels
     //! @version 0.0
     //!

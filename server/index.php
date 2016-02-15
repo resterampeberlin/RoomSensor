@@ -1,6 +1,6 @@
 <?php
     //!
-    //! @file Smarthome.php
+    //! @file index.php
     //! @author Markus Nickels
     //! @version 0.0
     //!

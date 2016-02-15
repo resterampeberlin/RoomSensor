@@ -1,10 +1,11 @@
 <?php
     //!
-    //! @file addSensorData.php
+    //! @file Dummy-Confidential.php
     //! @author Markus Nickels
     //! @version 0.0
     //!
-    //! This script add the data sent by the ESP8266 to the database
+    //! Confidential declarations for server scripts, this file should be
+    //! renamed to Confidential.php
     //!
     
     // This file is part of the Application "RoomSensor".
@@ -21,24 +22,7 @@
     //
     // You should have received a copy of the GNU General Public License
     // along with RoomSensor.  If not, see <http://www.gnu.org/licenses/>.
-    
-    require_once ('Smarthome.php');
 
-	isset($_GET['locationId']) ? $locationId=$_GET['locationId'] : $locationId='1';
-	isset($_GET['sensorId'])   ? $sensorId=$_GET['sensorId']     : $sensorId='1';
-	isset($_GET['value'])      ? $value=$_GET['value']           : $value='25.0';
-
-	try {
-
-		$db = new PDO('mysql:host='.$dbHost.';dbname='.$db, $dbUser, $dbPw);
-
-	}
-	catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-    }
-
-    $stmt = $db->prepare("INSERT INTO sensorData (sensorId, locationId, value) VALUES (?, ?, ?);");
-    $stmt->execute(array($sensorId, $locationId, $value));
-	
-	echo 'done<br>';
+    $dbUser = "user";              //!< database user
+    $dbPw   = "password";          //!< database password
 ?>
