@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['dummy_2dconfidential_2eh',['Dummy-Confidential.h',['../_dummy-_confidential_8h.html',1,'']]],
-  ['dummy_2dconfidential_2ephp',['Dummy-Confidential.php',['../_dummy-_confidential_8php.html',1,'']]]
+  ['conf_5fhost',['CONF_HOST',['../_dummy-_confidential_8h.html#aca721b6ccddfc5814e2846fb4012d3aa',1,'Dummy-Confidential.h']]],
+  ['conf_5fpassword',['CONF_PASSWORD',['../_dummy-_confidential_8h.html#a8519fcbc6bb035d854caf67e0201399d',1,'Dummy-Confidential.h']]],
+  ['conf_5fssid',['CONF_SSID',['../_dummy-_confidential_8h.html#a860290cd7e2b5b743a2748311e67cde6',1,'Dummy-Confidential.h']]]
 ];

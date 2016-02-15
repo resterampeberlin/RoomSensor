@@ -98,13 +98,14 @@ Sensor</h2>
 <ol type="1">
 <li>Refer to sketch RoomSensor.sch for wiring (wire GPIO2 to 1-wire bus with 4,7K pullup)</li>
 <li>Create file confidential.h in which you define host, WLAN name and password (see <a class="el" href="_room_sensor_8ino.html#a587ba0cb07f02913598610049a3bbb79" title="WLAN-Name. ">ssid</a>, <a class="el" href="_room_sensor_8ino.html#aa4a2ebcb494493f648ae1e6975672575" title="WLAN Password. ">password</a>, <a class="el" href="_room_sensor_8ino.html#ae032e164f1daa754d6fbb79d59723931">host</a>)</li>
-<li>Define ::locationId in <a class="el" href="_room_sensor_8ino.html">Roomsensor.ino</a></li>
+<li>Define <a class="el" href="_room_sensor_8ino.html#ab7e96e306fd9acfaa393de5773cd9715">locationId</a> in <a class="el" href="_room_sensor_8ino.html">Roomsensor.ino</a></li>
 <li>Compile and load to ESP8266</li>
 <li>Connect the sensor one by one (after a reset) and remember unique HW-Id using the serial monitor</li>
-<li>Modify ::sensorInfo with the remembered values</li>
+<li>Modify <a class="el" href="_room_sensor_8ino.html#a2338e82ebdffe4b6dad1e02afae2e970">sensorInfo</a> with the remembered values</li>
 <li>Compile and load again. Now all sensor should be marked as "found"</li>
 </ol>
-<p>Server</p>
+<h2><a class="anchor" id="Server"></a>
+Server</h2>
 <ol type="1">
 <li>Install MySQL/MariaDb and PHP on server</li>
 <li>Install jpgraph library on server (see <a href="http://jpgraph.net">http://jpgraph.net</a>)</li>
@@ -113,6 +114,15 @@ Sensor</h2>
 <li>Install server scripts</li>
 <li>Create file Confidential.php with user name and password for mysql server (see <a class="el" href="_smarthome_8php.html">Smarthome.php</a>)</li>
 </ol>
+<p>@ Known bugs</p>
+<ul>
+<li>Last measurement displayed incorrectly (it is not the last measurement)</li>
+<li>no indication when selected date range does not contain any data</li>
+</ul>
+<p>@ To Do</p>
+<ul>
+<li>selection of location in <a class="el" href="index_8php.html">index.php</a></li>
+</ul>
 <h1><a class="anchor" id="Credits"></a>
 Credits</h1>
 <p>Currently nobody </p>

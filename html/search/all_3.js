@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['host',['host',['../_room_sensor_8ino.html#ae032e164f1daa754d6fbb79d59723931',1,'RoomSensor.ino']]]
+  ['dummy_2dconfidential_2eh',['Dummy-Confidential.h',['../_dummy-_confidential_8h.html',1,'']]],
+  ['dummy_2dconfidential_2ephp',['Dummy-Confidential.php',['../_dummy-_confidential_8php.html',1,'']]]
 ];
