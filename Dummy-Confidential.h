@@ -22,7 +22,7 @@
 // You should have received a copy of the GNU General Public License
 // along with RoomSensor.  If not, see <http://www.gnu.org/licenses/>.
 
-#define CONF_SSID       "WLAN"
-#define CONF_PASSWORD   "Password"
-#define CONF_HOST        "192.168.0.4"
+#define CONF_SSID       "WLAN"          //!< WLAN-Name
+#define CONF_PASSWORD   "Password"      //!< WLAN-Password
+#define CONF_HOST        "192.168.0.4"  //!< MySQL server address
 

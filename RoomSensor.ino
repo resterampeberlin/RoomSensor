@@ -35,21 +35,16 @@
 //!@{
 const char* ssid      = CONF_SSID;        //!< WLAN-Name
 const char* password  = CONF_PASSWORD;    //!< WLAN Password
-const char* host      = CONF_HOST;         //!< Server where the data is sent to
+const char* host      = CONF_HOST;        //!< MySQL Server address
 //!@}
 
-// OneWire Setup, connect to GPIO 2
-OneWire oneWire(2);
-DallasTemperature sensors(&oneWire);
+OneWire oneWire(2);                       //!< 1-wire connected to GPIO 2
+DallasTemperature sensors(&oneWire);      //!< temperature sensors on 1-Wire
 
 #define OneWireAddressSize 8              //!< A 1-Wire address consists of 8 bytes
 
 //!
-//! @name structure, where the sensor configuration is stored
-//!
-//! This structure has to be carefully pre-initialised with the real
-//! HW-ID of the sensors. Look carefully to the output on the serial
-//! console to check the configuration
+//! structure, where the sensor configuration is stored
 //!
 
 typedef struct {
@@ -59,7 +54,11 @@ typedef struct {
 } sensorInfo_t;
 
 //!
-//! @name configuration my sensors
+//! configuration of my sensors
+//! 
+//! This structure has to be carefully pre-initialised with the real
+//! HW-ID of the sensors. Look carefully to the output on the serial
+//! console to check the configuration
 //!
 
 sensorInfo_t sensorInfo[] = {
@@ -70,7 +69,7 @@ sensorInfo_t sensorInfo[] = {
   5, false, {0x28, 0xFF, 0xCC, 0x67, 0xA4, 0x15, 0x04, 0x47} };
 
 //!
-//! @name location ID of current capture
+//! ID of current capture
 //!
 //! This value must match the ID in the database, table "location" e.g.
 //!
@@ -83,7 +82,7 @@ sensorInfo_t sensorInfo[] = {
 int const locationId = 1;
 
 //!
-//! @name Setup routine
+//! Setup routine
 //!
 
 void setup() {
@@ -166,7 +165,7 @@ void setup() {
 }
 
 //!
-//! @name main routine
+//! Main routine
 //!
 
 void loop() {
@@ -272,14 +271,14 @@ void loop() {
 //! -# Refer to sketch RoomSensor.sch for wiring (wire GPIO2 to 1-wire bus with 4,7K pullup)
 //! -# Create file confidential.h in which you define host, WLAN name and password 
 //!    (see ::ssid, ::password, ::host)
-//! -# Define ::locationId in Roomsensor.ino
+//! -# Define #locationId in Roomsensor.ino
 //! -# Compile and load to ESP8266
 //! -# Connect the sensor one by one (after a reset) and remember unique HW-Id using the 
 //!    serial monitor
-//! -# Modify ::sensorInfo with the remembered values
+//! -# Modify #sensorInfo with the remembered values
 //! -# Compile and load again. Now all sensor should be marked as "found"
 //!
-//! @ssubection Server
+//! @subsection Server
 //!
 //! -# Install MySQL/MariaDb and PHP on server
 //! -# Install jpgraph library on server (see http://jpgraph.net)
@@ -288,6 +287,15 @@ void loop() {
 //! -# Install server scripts 
 //! -# Create file Confidential.php with user name and password for mysql server 
 //!    (see Smarthome.php)
+//!
+//! @ Known bugs
+//!
+//! - Last measurement displayed incorrectly (it is not the last measurement)
+//! - no indication when selected date range does not contain any data
+//!
+//! @ To Do
+//!
+//! - selection of location in index.php
 //!
 //! @section Credits
 //!
