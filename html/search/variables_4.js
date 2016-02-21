@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['onewire',['oneWire',['../_room_sensor_8ino.html#a18aa2e713b723d14e68fe9df63be78a3',1,'RoomSensor.ino']]]
+  ['measurement',['measurement',['../_room_sensor_8ino.html#ac8f76bebd36f9e0b6ee9198b3d170b0f',1,'RoomSensor.ino']]]
 ];

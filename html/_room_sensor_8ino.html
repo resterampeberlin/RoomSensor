@@ -97,6 +97,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;OneWire.h&gt;</code><br />
 <code>#include &lt;DallasTemperature.h&gt;</code><br />
 <code>#include &quot;Confidential.h&quot;</code><br />
+<code>#include &lt;SPI.h&gt;</code><br />
+<code>#include &lt;Wire.h&gt;</code><br />
+<code>#include &lt;Adafruit_GFX.h&gt;</code><br />
+<code>#include &lt;Adafruit_SSD1306.h&gt;</code><br />
 </div>
 <p><a href="_room_sensor_8ino_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -107,17 +111,57 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a654c02206a58165042e10bce786362d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a654c02206a58165042e10bce786362d8"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#a654c02206a58165042e10bce786362d8">USE_DISPLAY</a></td></tr>
+<tr class="memdesc:a654c02206a58165042e10bce786362d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">use OLED display as output <br /></td></tr>
+<tr class="separator:a654c02206a58165042e10bce786362d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae06428433cd028467042899f5457abd3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae06428433cd028467042899f5457abd3"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>PRINTLN</b>(s)    &#160;&#160;&#160;Serial.println(s); display.println(s); display.display()</td></tr>
+<tr class="separator:ae06428433cd028467042899f5457abd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af74a9b04b86987c79d9921fea289ab8c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af74a9b04b86987c79d9921fea289ab8c"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>PRINT</b>(s)        &#160;&#160;&#160;Serial.print(s); display.print(s); display.display()</td></tr>
+<tr class="separator:af74a9b04b86987c79d9921fea289ab8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8d6a622a7a7099e684de72caaf67864"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa8d6a622a7a7099e684de72caaf67864"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#aa8d6a622a7a7099e684de72caaf67864">SOL_PIN</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:aa8d6a622a7a7099e684de72caaf67864"><td class="mdescLeft">&#160;</td><td class="mdescRight">sign of life LED on GPIO0 <br /></td></tr>
+<tr class="separator:aa8d6a622a7a7099e684de72caaf67864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5e649aa028bd3be75964322c1cc6ed0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad5e649aa028bd3be75964322c1cc6ed0"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#ad5e649aa028bd3be75964322c1cc6ed0">ONEWIRE_PIN</a>&#160;&#160;&#160;2</td></tr>
+<tr class="memdesc:ad5e649aa028bd3be75964322c1cc6ed0"><td class="mdescLeft">&#160;</td><td class="mdescRight">1-wire connection pin on GPIO2 <br /></td></tr>
+<tr class="separator:ad5e649aa028bd3be75964322c1cc6ed0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb30e76a2a814c57d5ce9d9b4f4010d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb30e76a2a814c57d5ce9d9b4f4010d0"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#aeb30e76a2a814c57d5ce9d9b4f4010d0">OneWireAddressSize</a>&#160;&#160;&#160;8</td></tr>
 <tr class="memdesc:aeb30e76a2a814c57d5ce9d9b4f4010d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">A 1-Wire address consists of 8 bytes. <br /></td></tr>
 <tr class="separator:aeb30e76a2a814c57d5ce9d9b4f4010d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">OLED wiring</div></td></tr>
+<tr class="memitem:a9065e33a0ffff5f88cb1bb46e2bb38f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9065e33a0ffff5f88cb1bb46e2bb38f3"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#a9065e33a0ffff5f88cb1bb46e2bb38f3">OLED_MOSI</a>&#160;&#160;&#160;13</td></tr>
+<tr class="memdesc:a9065e33a0ffff5f88cb1bb46e2bb38f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">data out on GPIO13 <br /></td></tr>
+<tr class="separator:a9065e33a0ffff5f88cb1bb46e2bb38f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ada351153327868280ab3e62367f927"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ada351153327868280ab3e62367f927"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#a8ada351153327868280ab3e62367f927">OLED_CLK</a>&#160;&#160;&#160;14</td></tr>
+<tr class="memdesc:a8ada351153327868280ab3e62367f927"><td class="mdescLeft">&#160;</td><td class="mdescRight">clock out on GPIO14 <br /></td></tr>
+<tr class="separator:a8ada351153327868280ab3e62367f927"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab92f2aedff7d366df56a26b3c9c9d795"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab92f2aedff7d366df56a26b3c9c9d795"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#ab92f2aedff7d366df56a26b3c9c9d795">OLED_DC</a>&#160;&#160;&#160;4</td></tr>
+<tr class="memdesc:ab92f2aedff7d366df56a26b3c9c9d795"><td class="mdescLeft">&#160;</td><td class="mdescRight">data/command out on GPIO13 <br /></td></tr>
+<tr class="separator:ab92f2aedff7d366df56a26b3c9c9d795"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab68a9b3dbffcafd9849e74c4998b8840"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab68a9b3dbffcafd9849e74c4998b8840"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#ab68a9b3dbffcafd9849e74c4998b8840">OLED_CS</a>&#160;&#160;&#160;12</td></tr>
+<tr class="memdesc:ab68a9b3dbffcafd9849e74c4998b8840"><td class="mdescLeft">&#160;</td><td class="mdescRight">chip select out on GPIO13 <br /></td></tr>
+<tr class="separator:ab68a9b3dbffcafd9849e74c4998b8840"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a619e07239fb3b9b14d40646ab41d5b4f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#a619e07239fb3b9b14d40646ab41d5b4f">OLED_RESET</a>&#160;&#160;&#160;5</td></tr>
+<tr class="separator:a619e07239fb3b9b14d40646ab41d5b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a5ca21cd021478f6bd2226732ad1116af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ca21cd021478f6bd2226732ad1116af"></a>
-OneWire&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#a5ca21cd021478f6bd2226732ad1116af">oneWire</a> (2)</td></tr>
-<tr class="memdesc:a5ca21cd021478f6bd2226732ad1116af"><td class="mdescLeft">&#160;</td><td class="mdescRight">1-wire connected to GPIO 2 <br /></td></tr>
-<tr class="separator:a5ca21cd021478f6bd2226732ad1116af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1671c15ea8b66182fa3e462ac06caf2d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1671c15ea8b66182fa3e462ac06caf2d"></a>
+Adafruit_SSD1306&#160;</td><td class="memItemRight" valign="bottom"><b>display</b> (<a class="el" href="_room_sensor_8ino.html#a9065e33a0ffff5f88cb1bb46e2bb38f3">OLED_MOSI</a>, <a class="el" href="_room_sensor_8ino.html#a8ada351153327868280ab3e62367f927">OLED_CLK</a>, <a class="el" href="_room_sensor_8ino.html#ab92f2aedff7d366df56a26b3c9c9d795">OLED_DC</a>, <a class="el" href="_room_sensor_8ino.html#a619e07239fb3b9b14d40646ab41d5b4f">OLED_RESET</a>, <a class="el" href="_room_sensor_8ino.html#ab68a9b3dbffcafd9849e74c4998b8840">OLED_CS</a>)</td></tr>
+<tr class="separator:a1671c15ea8b66182fa3e462ac06caf2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62a04d97ae24072176b85abc6ece59db"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a62a04d97ae24072176b85abc6ece59db"></a>
+OneWire&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#a62a04d97ae24072176b85abc6ece59db">oneWire</a> (<a class="el" href="_room_sensor_8ino.html#ad5e649aa028bd3be75964322c1cc6ed0">ONEWIRE_PIN</a>)</td></tr>
+<tr class="memdesc:a62a04d97ae24072176b85abc6ece59db"><td class="mdescLeft">&#160;</td><td class="mdescRight">1-wire connected to GPIO 2 <br /></td></tr>
+<tr class="separator:a62a04d97ae24072176b85abc6ece59db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fc01d736fe50cf5b977f755b675f11d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#a4fc01d736fe50cf5b977f755b675f11d">setup</a> ()</td></tr>
 <tr class="separator:a4fc01d736fe50cf5b977f755b675f11d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe461d27b9c48d5921c00d521181f12f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#afe461d27b9c48d5921c00d521181f12f">loop</a> ()</td></tr>
@@ -133,6 +177,8 @@ DallasTemperature sensors &amp;&#160;</td><td class="memItemRight" valign="botto
 <tr class="separator:a2338e82ebdffe4b6dad1e02afae2e970"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7e96e306fd9acfaa393de5773cd9715"><td class="memItemLeft" align="right" valign="top">int const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#ab7e96e306fd9acfaa393de5773cd9715">locationId</a> = 1</td></tr>
 <tr class="separator:ab7e96e306fd9acfaa393de5773cd9715"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8f76bebd36f9e0b6ee9198b3d170b0f"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_room_sensor_8ino.html#ac8f76bebd36f9e0b6ee9198b3d170b0f">measurement</a> = 0</td></tr>
+<tr class="separator:ac8f76bebd36f9e0b6ee9198b3d170b0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Server specific definitions</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>Defined in Confidential.h </p>
 </div></td></tr>
@@ -149,10 +195,26 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Markus Nickels </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.0 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>1.0.0 </dd></dl>
 
 <p>Definition in file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
-</div><h2 class="groupheader">Function Documentation</h2>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a619e07239fb3b9b14d40646ab41d5b4f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define OLED_RESET&#160;&#160;&#160;5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>reset out on GPIO13 </p>
+
+<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00044">44</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="afe461d27b9c48d5921c00d521181f12f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -167,7 +229,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 </div><div class="memdoc">
 <p>Main routine </p>
 
-<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00171">171</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
+<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00228">228</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
 
 </div>
 </div>
@@ -185,7 +247,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 </div><div class="memdoc">
 <p>Setup routine </p>
 
-<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00088">88</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
+<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00127">127</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
 
 </div>
 </div>
@@ -201,7 +263,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 </div><div class="memdoc">
 <p>MySQL Server address </p>
 
-<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00038">38</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
+<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00071">71</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
 
 </div>
 </div>
@@ -225,7 +287,22 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <td>2 </td><td>kitchen </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00082">82</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
+<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00115">115</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac8f76bebd36f9e0b6ee9198b3d170b0f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t measurement = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>measurement counter </p>
+
+<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00121">121</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
 
 </div>
 </div>
@@ -241,7 +318,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div><div class="line">  1, <span class="keyword">false</span>, {0x28, 0xFF, 0x2A, 0x33, 0xA4, 0x15, 0x01, 0xE8},</div><div class="line">  2, <span class="keyword">false</span>, {0x28, 0xFF, 0xF4, 0x66, 0xA4, 0x15, 0x04, 0x72},</div><div class="line">  3, <span class="keyword">false</span>, {0x28, 0xFF, 0xFF, 0x54, 0xA4, 0x15, 0x03, 0xCE},</div><div class="line">  4, <span class="keyword">false</span>, {0x28, 0xFF, 0x96, 0x28, 0xA4, 0x15, 0x03, 0x96},</div><div class="line">  5, <span class="keyword">false</span>, {0x28, 0xFF, 0xCC, 0x67, 0xA4, 0x15, 0x04, 0x47} }</div></div><!-- fragment --><p>configuration of my sensors</p>
 <p>This structure has to be carefully pre-initialised with the real HW-ID of the sensors. Look carefully to the output on the serial console to check the configuration </p>
 
-<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00064">64</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
+<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00097">97</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
 
 </div>
 </div>

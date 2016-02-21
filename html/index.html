@@ -85,10 +85,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#s1">Purpose</a></li>
 <li class="level1"><a href="#s2">Compatibility</a></li>
-<li class="level1"><a href="#s3">Installation</a><ul><li class="level2"><a href="#s3_1">Sensor</a></li>
+<li class="level1"><a href="#s3">Installation</a><ul><li class="level2"><a href="#s3_1">Sensor</a><ul><li class="level3"><a href="#Inst1">Optional usage of &quot;sign of life&quot; LED</a></li>
+<li class="level3"><a href="#Inst2">Optional usage of OLED display</a></li>
+</ul>
+</li>
 <li class="level2"><a href="#s3_2">Server</a></li>
 </ul>
 </li>
+<li class="level1"><a href="#vh">Version History</a></li>
 <li class="level1"><a href="#s4">Known bugs</a></li>
 <li class="level1"><a href="#s5">To Do</a></li>
 <li class="level1"><a href="#s6">Credits</a></li>
@@ -99,9 +103,10 @@ Purpose</h1>
 <p>This arduino application runs on en ESP8266, captures data from the sensors the one wire bus and sends it to a MySQL server. This data can be used to be displayed in nice graphs A typical application will be to capture temperature data in a room</p>
 <h1><a class="anchor" id="s2"></a>
 Compatibility</h1>
-<p>This is program has been tested with </p><ul>
-<li>ESP8266 </li>
+<p>This is program has been tested with</p><ul>
+<li>ESP8266</li>
 <li>Maxim DS18B20 digital temperature sensor</li>
+<li>(optional) Adafruit SSD1306 OLED display</li>
 </ul>
 <h1><a class="anchor" id="s3"></a>
 Installation</h1>
@@ -116,6 +121,42 @@ Sensor</h2>
 <li>Modify <a class="el" href="_room_sensor_8ino.html#a2338e82ebdffe4b6dad1e02afae2e970">sensorInfo</a> with the remembered values</li>
 <li>Compile and load again. Now all sensor should be marked as "found"</li>
 </ol>
+<h3><a class="anchor" id="Inst1"></a>
+Optional usage of "sign of life" LED</h3>
+<ol type="1">
+<li>Uncomment <a class="el" href="_room_sensor_8ino.html#aa8d6a622a7a7099e684de72caaf67864" title="sign of life LED on GPIO0 ">SOL_PIN</a> in source code</li>
+<li>Connect a LED with a 330 resistor between GPIO0 and GND</li>
+<li>for any other wiring change <a class="el" href="_room_sensor_8ino.html#aa8d6a622a7a7099e684de72caaf67864" title="sign of life LED on GPIO0 ">SOL_PIN</a> in source code</li>
+</ol>
+<h3><a class="anchor" id="Inst2"></a>
+Optional usage of OLED display</h3>
+<p>If you want to use an OLED display as status display should should do the following:</p><ol type="1">
+<li>Use an Adafruit HUZZAH ESP8266 board or similar (you need various GPIO pins)</li>
+<li>Use an Adafruit SSD1306 display</li>
+<li>use my forks of <a href="https://github.com/resterampeberlin/Adafruit-GFX-Library">Adafruit_GFX.h</a> and <a href="https://github.com/resterampeberlin/Adafruit_SSD1306">Adafruit_SSD1306.h</a>. This is necessary to use the "AutoScroll" feature</li>
+<li>Uncomment <a class="el" href="_room_sensor_8ino.html#a654c02206a58165042e10bce786362d8" title="use OLED display as output ">USE_DISPLAY</a> in source code</li>
+<li>Connect the display to the MCU as follows (for any other wiring change <a class="el" href="_room_sensor_8ino.html#a9065e33a0ffff5f88cb1bb46e2bb38f3" title="data out on GPIO13 ">OLED_MOSI</a>, <a class="el" href="_room_sensor_8ino.html#a8ada351153327868280ab3e62367f927" title="clock out on GPIO14 ">OLED_CLK</a>, <a class="el" href="_room_sensor_8ino.html#ab92f2aedff7d366df56a26b3c9c9d795" title="data/command out on GPIO13 ">OLED_DC</a>, <a class="el" href="_room_sensor_8ino.html#ab68a9b3dbffcafd9849e74c4998b8840" title="chip select out on GPIO13 ">OLED_CS</a>, <a class="el" href="_room_sensor_8ino.html#a619e07239fb3b9b14d40646ab41d5b4f">OLED_RESET</a> in source code) <table class="doxtable">
+<tr>
+<th>display pin </th><th>MCU Pin  </th></tr>
+<tr>
+<td>Data </td><td>GPIO13 </td></tr>
+<tr>
+<td>CLK </td><td>GPIO14 </td></tr>
+<tr>
+<td>DC </td><td>GPIO4 </td></tr>
+<tr>
+<td>CS </td><td>GPIO12 </td></tr>
+<tr>
+<td>RST </td><td>GPIO5 </td></tr>
+<tr>
+<td>GND </td><td>GND </td></tr>
+<tr>
+<td>3v3 </td><td>3,3V </td></tr>
+<tr>
+<td>Vin </td><td>not connected </td></tr>
+</table>
+</li>
+</ol>
 <h2><a class="anchor" id="s3_2"></a>
 Server</h2>
 <ol type="1">
@@ -126,6 +167,11 @@ Server</h2>
 <li>Install server scripts</li>
 <li>Create file Confidential.php with user name and password for mysql server (see <a class="el" href="_smarthome_8php.html">Smarthome.php</a>)</li>
 </ol>
+<h1><a class="anchor" id="vh"></a>
+Version History</h1>
+<ul>
+<li>Version 1.0.0</li>
+</ul>
 <h1><a class="anchor" id="s4"></a>
 Known bugs</h1>
 <ul>
