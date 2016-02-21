@@ -1,7 +1,7 @@
 //!
 //! @file RoomSensor.ino
 //! @author Markus Nickels
-//! @version 0.0
+//! @version 1.0.0
 //!
 
 // This file is part of the Application "RoomSensor".
@@ -25,7 +25,40 @@
 
 #include "Confidential.h"
 
-//#define SOL_PIN       2       // sign of life
+#define USE_DISPLAY                      //!< use OLED display as output
+
+#ifdef USE_DISPLAY
+  #include <SPI.h>
+  #include <Wire.h>
+  #include <Adafruit_GFX.h>
+  #include <Adafruit_SSD1306.h>
+
+//!
+//! @name OLED wiring
+//!
+//!@{
+  #define OLED_MOSI  13                   //!< data out on GPIO13   
+  #define OLED_CLK   14                   //!< clock out on GPIO14    
+  #define OLED_DC    4                    //!< data/command out on GPIO13     
+  #define OLED_CS    12                   //!< chip select out on GPIO13 
+  #define OLED_RESET 5                    //!< reset out on GPIO13 
+//!@}
+
+  #if (SSD1306_LCDHEIGHT != 64)
+    #error("Height incorrect, please fix Adafruit_SSD1306.h!");
+  #endif
+  
+  Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
+
+  #define PRINTLN(s)    Serial.println(s); display.println(s); display.display()
+  #define PRINT(s)      Serial.print(s); display.print(s); display.display()
+#else
+  #define PRINTLN(s)    Serial.println(s)
+  #define PRINT(s)      Serial.print(s)
+#endif 
+
+#define SOL_PIN      0                    //!< sign of life LED on GPIO0
+#define ONEWIRE_PIN  2                    //!< 1-wire connection pin on GPIO2
 
 //!
 //! @name Server specific definitions
@@ -38,7 +71,7 @@ const char* password  = CONF_PASSWORD;    //!< WLAN Password
 const char* host      = CONF_HOST;        //!< MySQL Server address
 //!@}
 
-OneWire oneWire(2);                       //!< 1-wire connected to GPIO 2
+OneWire oneWire(ONEWIRE_PIN);             //!< 1-wire connected to GPIO 2
 DallasTemperature sensors(&oneWire);      //!< temperature sensors on 1-Wire
 
 #define OneWireAddressSize 8              //!< A 1-Wire address consists of 8 bytes
@@ -82,6 +115,12 @@ sensorInfo_t sensorInfo[] = {
 int const locationId = 1;
 
 //!
+//! measurement counter
+//!
+
+uint16_t measurement = 0;
+
+//!
 //! Setup routine
 //!
 
@@ -89,40 +128,55 @@ void setup() {
   //OneWire Sensor start working
   sensors.begin();
 
+  #ifdef USE_DISPLAY
+    display.begin(SSD1306_SWITCHCAPVCC);
+    display.display();
+
+    delay(2000);
+    display.clearDisplay();
+    
+    display.setCursor(0,0);
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setTextWrap(true);
+    display.setTextAutoScroll(true);
+  #endif
+
   Serial.begin(115200);
   Serial.println("Starting setup");
 
   delay(10);
 
-  // configure I/O
-  //pinMode(SOL_PIN, OUTPUT); 
-  // digitalWrite(SOL_PIN, LOW);
+#ifdef SOL_PIN  
+  // configure sign of life LED
+  pinMode(SOL_PIN, OUTPUT); 
+  digitalWrite(SOL_PIN, LOW);
+#endif 
 
   // We start by connecting to a WiFi network
 
-  Serial.println();
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
+  PRINT("Connecting to ");
+  PRINTLN(ssid);
   
   WiFi.begin(ssid, password);
   
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
+    PRINT(".");
   }
 
-  Serial.println("");
-  Serial.println("WiFi connected");  
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+  PRINTLN("WiFi connected");  
+  PRINTLN("IP address: ");
+  PRINTLN(WiFi.localIP());
 
   randomSeed(analogRead(0));
 
   // show available sensors
   Serial.println("Available Sensors");
 
-  for (int i=0; i < sensors.getDeviceCount(); i++) {
+  uint8_t sensorCount = 0;
+
+  for (uint8_t i=0; i < sensors.getDeviceCount(); i++) {
     Serial.print(i);
     Serial.print(": ");
 
@@ -147,21 +201,24 @@ void setup() {
       if (!memcmp(address, sensorInfo[sensor].address, sizeof(address))) {
         sensorInfo[sensor].available=1;
         found = sensorInfo[sensor].sensorID;
+        sensorCount++;
         break;
       }
     }
 
     if (found) {
-        Serial.print(" found as SensorID=");
-        Serial.println(found);
+        PRINT("Sensor ");
+        PRINT(found);
+        PRINTLN(" found");
     } 
     else {
       Serial.println(" not found");
     }
   }
 
-  Serial.println("Setup completed");
-  Serial.println("");
+  PRINT(sensorCount);
+  PRINTLN(" sensors found");
+  PRINTLN("Setup completed");
 }
 
 //!
@@ -170,7 +227,19 @@ void setup() {
 
 void loop() {
   float sensorValue = 0.0;
-  
+
+  PRINT("Measurement ");
+  PRINTLN(measurement);
+
+#ifdef SOL_PIN  
+  // Blink sign of life LED
+  digitalWrite(SOL_PIN, HIGH);
+#endif 
+
+#ifdef USE_DISPLAY
+  display.dim(false);
+#endif  
+
   for (int sensor=0; sensor < sizeof(sensorInfo)/sizeof(sensorInfo[0]); sensor++) {
     if (!sensorInfo[sensor].available) {
         break;
@@ -180,14 +249,11 @@ void loop() {
     sensors.requestTemperatures();
     sensorValue = sensors.getTempC(sensorInfo[sensor].address);
 
-    Serial.print("TempSensor[");
-    Serial.print(sensor);
-    Serial.print("]=");
-    Serial.println(sensorValue);
-    
-    // blink sign of life LED
-    //digitalWrite(SOL_PIN, HIGH);
-
+    PRINT("Sensor[");
+    PRINT(sensorInfo[sensor].sensorID);
+    PRINT("]=");
+    PRINTLN(sensorValue);   
+ 
     // Start connection
     Serial.print("connecting to ");
     Serial.println(host);
@@ -226,9 +292,6 @@ void loop() {
         client.stop();
         return;
       }
-      
-      // blink sign of life LED
-      //digitalWrite(SOL_PIN, LOW);
     }
 
     delay(1000);
@@ -243,10 +306,30 @@ void loop() {
     Serial.println("closing connection");
   }
 
+  measurement++;
+
   Serial.println();
   Serial.println("waiting 1 minute");
 
+#ifdef SOL_PIN  
+  // Blink sign of life LED
+  digitalWrite(SOL_PIN, LOW);
+#endif 
+
+#ifdef USE_DISPLAY
+  display.dim(true);
+  delay(1000 * 5);
+  
+  // setting the display dark saves 4mA current
+  display.clearDisplay();
+  display.setCursor(0,0);
+  display.display();
+  delay(1000 * 55);
+#else
   delay(1000 * 60);
+#endif  
+
+
 }
 
 //!
@@ -263,8 +346,9 @@ void loop() {
 //! @section s2 Compatibility
 //!
 //! This is program has been tested with
-//! @li ESP8266
-//! @li Maxim DS18B20 digital temperature sensor
+//! - ESP8266
+//! - Maxim DS18B20 digital temperature sensor
+//! - (optional) Adafruit SSD1306 OLED display
 //!
 //! @section s3 Installation
 //!
@@ -280,6 +364,35 @@ void loop() {
 //! -# Modify #sensorInfo with the remembered values
 //! -# Compile and load again. Now all sensor should be marked as "found"
 //!
+//! @subsubsection Inst1 Optional usage of "sign of life" LED
+//!
+//! -# Uncomment #SOL_PIN in source code
+//! -# Connect a LED with a 330 resistor between GPIO0 and GND
+//! -# for any other wiring change #SOL_PIN in source code
+//! 
+//! @subsubsection Inst2 Optional usage of OLED display
+//!
+//! If you want to use an OLED display as status display should should do the following:
+//! -# Use an Adafruit HUZZAH ESP8266 board or similar (you need various GPIO pins)
+//! -# Use an Adafruit SSD1306 display
+//! -# use my forks of 
+//!    <a href="https://github.com/resterampeberlin/Adafruit-GFX-Library">Adafruit_GFX.h</a> and 
+//!    <a href="https://github.com/resterampeberlin/Adafruit_SSD1306">Adafruit_SSD1306.h</a>. 
+//!    This is necessary to use the "AutoScroll" feature
+//! -# Uncomment #USE_DISPLAY in source code
+//! -# Connect the display to the MCU as follows 
+//!    (for any other wiring change #OLED_MOSI, #OLED_CLK, #OLED_DC, #OLED_CS, #OLED_RESET in source code)
+//!    display pin | MCU Pin
+//!    ----------- | --------
+//!    Data        | GPIO13
+//!    CLK         | GPIO14
+//!    DC          | GPIO4
+//!    CS          | GPIO12
+//!    RST         | GPIO5
+//!    GND         | GND
+//!    3v3         | 3,3V
+//!    Vin         | not connected
+//!
 //! @subsection s3_2 Server
 //!
 //! -# Install MySQL/MariaDb and PHP on server
@@ -289,6 +402,10 @@ void loop() {
 //! -# Install server scripts 
 //! -# Create file Confidential.php with user name and password for mysql server 
 //!    (see Smarthome.php)
+//!
+//! @section vh Version History
+//!
+//! - Version 1.0.0
 //!
 //! @section s4 Known bugs
 //!
