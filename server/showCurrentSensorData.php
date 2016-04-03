@@ -34,6 +34,7 @@
     
     $xAxis = array();
     $yAxis = array();
+    $minmax = array();
     
     // Basic constants for display
     //print_r2($_GET);
@@ -63,16 +64,18 @@
     
     // Retrieve last available sensor data
     $stmt = $db->prepare('SELECT sensorId,'.
-                            'MAX(time) AS time,'.
                             'value,'.
-                            'sensor.name AS name,'.
-                            'sensorType.name AS class,'.
-                            'sensorType.unit '.
+                            'time,'.
+                            'sensor.name AS name '.
                          'FROM sensorData '.
                          'JOIN sensor ON sensor.id=sensorData.sensorId '.
                          'JOIN sensorType ON sensorType.id=sensor.sensorTypeId '.
-                         'WHERE locationId=? '.
-                         'GROUP BY sensorId DESC');
+                         'WHERE time IN ('.
+                            'SELECT MAX(time) '.
+                            'FROM sensorData '.
+                            'WHERE locationId=? '.
+                            'GROUP BY sensorId);');
+    
     $stmt->execute(array($locationId));
     
     if ($stmt->rowCount() == 0) {
@@ -86,13 +89,30 @@
         $yAxis[$i] = $row['value'];
 
         $lastTime = new DateTime($row['time']);
-        $unit = $row['class'].'['.$row['unit'].']';
         $i++;
     }
     
     //print_r2($xAxis);
-    //print_r2($yAxis);
+    // print_r2($yAxis);
     
+    // Retrieve min/max values
+    $stmt = $db->prepare('SELECT sensorId, '.
+                            'MIN(value) AS value1, '.
+                            'MAX(value) AS value2 '.
+                         'FROM sensorData '.
+                         'WHERE locationId=? '.
+                         'GROUP BY sensorId DESC');
+    $stmt->execute(array($locationId));
+
+    $i = 0;
+    while($stmt && $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $minmax[$i++] = $row['value1'];
+        $minmax[$i++] = $row['value2'];
+    }
+    
+    //print_r2($minmax);
+    
+    // Format graph
     $graph = new Graph(1200,280);
     $graph->img->SetMargin(40,40,40,40);
     $graph->img->SetAntiAliasing();
@@ -110,10 +130,6 @@
     $graph->xaxis->SetTitle('Sensor','middle');
     $graph->xaxis->title->SetFont(FF_ARIAL, FS_NORMAL, 10);
     
-    // Y-Axis
-    $graph->yaxis->SetTitle($unit, 'middle');
-    $graph->yaxis->title->SetFont(FF_ARIAL, FS_NORMAL, 10);
-
     // Use 20% "grace" to get slightly larger scale then min/max of
     // data
     $graph->yscale->SetGrace(0);
@@ -121,6 +137,7 @@
     $bar = new BarPlot($yAxis);
 
     $bar->SetValuePos('top');
+    $bar->SetCenter();
     $bar->value->SetFont(FF_ARIAL);
     $bar->value->SetColor('black');
     $bar->value->SetFormat('%.1f °C');
@@ -129,5 +146,14 @@
     
     $graph->Add($bar);
     $bar->value->Show();
+    
+    $errplot=new ErrorPlot($minmax);
+    $errplot->SetColor("red");
+    $errplot->SetWeight(2);
+    $errplot->SetCenter();
+    
+    // Add the plot to the graph
+    //$graph->Add($errplot);
+
     $graph->Stroke();
 ?>

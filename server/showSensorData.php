@@ -51,8 +51,13 @@
     
     // Location to be displayed
     isset($_GET['locationId']) ?
-            $locationID = $_GET['locationId'] :
-            $locationID = '1';
+            $locationId = $_GET['locationId'] :
+            $locationId = '1';
+    
+    // sensorType to be displayed
+    isset($_GET['sensorTypeId']) ?
+            $sensorTypeId = $_GET['sensorTypeId'] :
+            $sensorTypeId = '1';
     
     // connect db
 	try {
@@ -68,17 +73,24 @@
     $stmt = $db->prepare('SELECT * '.
                          'FROM location '.
                          'WHERE id=?;');
-    $stmt->execute(array($locationID));
+    $stmt->execute(array($locationId));
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $locationName = $row['name'];
     
     // Retrieve available sensors
-    $stmt = $db->prepare('SELECT sensorData.sensorId, sensor.name '.
+    $stmt = $db->prepare('SELECT sensorData.sensorId, '.
+                            'sensor.name,'.
+                            'sensorType.unit,'.
+                            'sensorType.name AS class '.
                          'FROM sensorData '.
                          'JOIN sensor ON sensorData.sensorId=sensor.id '.
-                         'WHERE sensorData.locationId=? AND time BETWEEN ? AND ? '.
+                         'JOIN sensorType ON sensorType.Id=sensorTypeId '.
+                         'WHERE sensorData.locationId=? '.
+                            'AND sensorTypeId=? '.
+                            'AND time BETWEEN ? AND ? '.
                          'GROUP BY sensorId;');
-    $stmt->execute(array($locationID,
+    $stmt->execute(array($locationId,
+                         $sensorTypeId,
                          $dateFrom->format(DateTime::W3C),
                          $dateTo->format(DateTime::W3C)));
     
@@ -88,15 +100,23 @@
     }
     
     while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // print_r2($row);
+        
         $sensors[$row['sensorId']] =  $row['name'];
+        $class = $row['class'];
+        $unit = $row['unit'];
     }
     
     // Get Data
     $stmt = $db->prepare('SELECT * '.
                          'FROM sensorData '.
-                         'WHERE locationID=? AND time BETWEEN ? AND ? '.
+                         'JOIN sensor ON sensorData.sensorId=sensor.Id '.
+                         'WHERE locationId=? '.
+                            'AND sensorTypeId=? '.
+                            'AND time BETWEEN ? AND ? '.
                          'ORDER BY time ASC;');
-    $stmt->execute(array($locationID,
+    $stmt->execute(array($locationId,
+                         $sensorTypeId,
                          $dateFrom->format(DateTime::W3C),
                          $dateTo->format(DateTime::W3C)));
     
@@ -118,6 +138,8 @@
     $maxValue = 0;
     
     while($stmt && $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // print_r2($row);
+        
         $timeStamp = new DateTime($row['time']);
         
         // advance to matching time
@@ -143,17 +165,20 @@
         $i++;
     }
     
-    //print_r2($xAxis);
-    //print_r2($yAxis);
+    // print_r2($xAxis);
+    // print_r2($yAxis);
+    // print_r2($unit);
+    // print_r2($minValue);
+    // print_r2($maxValue);
     
     $graph = new Graph(1200,500);
     $graph->img->SetMargin(40,40,40,40);
     $graph->img->SetAntiAliasing();
-    $graph->SetScale('dateint', $minValue-1, $maxValue+1);
+    $graph->SetScale('dateint', $minValue, $maxValue);
     $graph->SetShadow();
     
     // Title
-    $graph->title->Set('Sensorwerte '.$locationName);
+    $graph->title->Set($class.' '.$locationName);
     $graph->title->SetFont(FF_ARIAL, FS_BOLD, 12);
     $graph->subtitle->SetFont(FF_ARIAL, FS_NORMAL, 10);
     $graph->subtitle->Set($dateFrom->format('d.m.y H:i:s').
@@ -167,12 +192,16 @@
     $graph->xaxis->scale->ticks->Set(60*60);
     $graph->xaxis->scale->SetTimeAlign(MINADJ_1);
     
-    // Y-Axis
+    // Y-Scale
     // Use 20% "grace" to get slightly larger scale then min/max of
     // data
     $graph->yscale->SetGrace(0);
-    $graph->yscale->SetGrace(0);
-   
+
+    // Y-Axis
+    $graph->yaxis->SetTitle($unit, 'middle');
+    $graph->yaxis->title->SetFont(FF_ARIAL, FS_NORMAL, 10);
+    $graph->yaxis->SetLabelFormat('%0.1f');
+
     foreach($sensors as $key => $value) {
         $p1 = new LinePlot($yAxis[$key], $xAxis);
         $p1->SetStepStyle();

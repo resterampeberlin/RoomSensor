@@ -33,27 +33,67 @@
     $delta = new DateInterval('PT2M');
     
     isset($_GET['from']) ?
-    $dateFrom = new DateTime($_GET['from']) :
-    $dateFrom = date_sub(new DateTime('now'), new DateInterval('PT12H'));
+        $dateFrom = new DateTime($_GET['from']) :
+        $dateFrom = date_sub(new DateTime('now'), new DateInterval('PT12H'));
     isset($_GET['to']) ?
-    $dateTo = new DateTime($_GET['to']) :
-    $dateTo = new DateTime('now');
+        $dateTo = new DateTime($_GET['to']) :
+        $dateTo = new DateTime('now');
     
     // Location to be displayed
     isset($_GET['locationId']) ?
-    $locationId = $_GET['locationId'] :
-    $locationId = '1';
+        $locationId = $_GET['locationId'] :
+        $locationId = '1';
     
     echo '<form action="index.php">';
     echo '  Start:';
-    echo '  <input type="datetime-local" name="from" placeholder="1999-12-24 06:39" value="'.$dateFrom->format('Y-m-d H:i:s').'">';
+    echo '  <input type="datetime-local" name="from" '.
+                  'placeholder="1999-12-24 06:39" '.
+                  'value="'.$dateFrom->format('Y-m-d H:i:s').'">';
     echo '  Ende:';
-    echo '  <input type="datetime-local" name="to" placeholder="1999-12-24 06:39" value="'.$dateTo->format('Y-m-d H:i:s').'">';
-    echo '  <input type="submit" value="Submit">';
+    echo '  <input type="datetime-local" name="to" '.
+                  'placeholder="1999-12-24 06:39" '.
+                  'value="'.$dateTo->format('Y-m-d H:i:s').'">';
+    echo '  <input type="submit" '.
+                  'value="Submit">';
     echo '</form>';
     
     echo '<center>'."\n";
-    echo '<img src="showCurrentSensorData.php?locationId=1"><br>'."\n";
-    echo '<img src="showSensorData.php?locationId='.$locationId.'&from='.$dateFrom->format('Y-m-d H:i:s').'&to='.$dateTo->format('Y-m-d H:i:s').'">'."\n";
+    
+    // Display current values
+    echo '<img src="showCurrentSensorData.php'.
+              '?locationId='.$locationId.'"><br>'."\n";
+    
+    // Display history for each sensor type
+    
+    // connect db
+    try {
+        $db = new PDO('mysql:host='.$dbHost.';dbname='.$db, $dbUser, $dbPw);
+        
+    }
+    catch (PDOException $e)
+    {
+        echo 'Connection failed: '.$e->getMessage();
+    }
+    
+    // Retrieve available sensors
+    $stmt = $db->prepare('SELECT sensorType.Id '.
+                         'FROM sensorData '.
+                         'JOIN sensor ON sensorData.sensorId=sensor.id '.
+                         'JOIN sensorType ON sensorType.Id=sensorTypeId '.
+                         'WHERE sensorData.locationId=? '.
+                         'AND time BETWEEN ? AND ? '.
+                         'GROUP BY sensorType.Id;');
+    $stmt->execute(array($locationId,
+                         $dateFrom->format(DateTime::W3C),
+                         $dateTo->format(DateTime::W3C)));
+   
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        echo '<img src="showSensorData.php'.
+                   '?locationId='.$locationId.
+                   '&sensorTypeId='.$row['Id'].
+                   '&from='.$dateFrom->format('Y-m-d H:i:s').
+                   '&to='.$dateTo->format('Y-m-d H:i:s').'">'."\n";
+    }
+    
     echo '</center>'."\n";
 ?>
