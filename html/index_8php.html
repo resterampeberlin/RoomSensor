@@ -25,7 +25,7 @@
   <td id="projectlogo"><img alt="Logo" src="RoomSensor.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">RoomSensor
-   &#160;<span id="projectnumber">0.0</span>
+   &#160;<span id="projectnumber">1.0</span>
    </div>
    <div id="projectbrief">Capture temperature data to database</div>
   </td>
@@ -102,6 +102,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a4f859c2cb6894b390e922966d2eb7554"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f859c2cb6894b390e922966d2eb7554"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>$delta</b> = new DateInterval('PT2M')</td></tr>
 <tr class="separator:a4f859c2cb6894b390e922966d2eb7554"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe4cc9788f52e49485473dc699537388"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><b>try</b></td></tr>
+<tr class="separator:abe4cc9788f52e49485473dc699537388"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c36db3cf521e29aaa4c1060504c3ba2"><td class="memItemLeft" align="right" valign="top">catch(PDOException $e)&#160;</td><td class="memItemRight" valign="bottom"><b>$stmt</b></td></tr>
+<tr class="separator:a1c36db3cf521e29aaa4c1060504c3ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adebef4d8af839861779ccfc1bd6d74f2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><b>while</b> ($row=$stmt-&gt;fetch(PDO::FETCH_ASSOC))</td></tr>
+<tr class="separator:adebef4d8af839861779ccfc1bd6d74f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Markus Nickels </dd></dl>
@@ -109,7 +115,56 @@ Variables</h2></td></tr>
 <p>General declarations for server scripts </p>
 
 <p>Definition in file <a class="el" href="index_8php_source.html">index.php</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Variable Documentation</h2>
+<a class="anchor" id="a1c36db3cf521e29aaa4c1060504c3ba2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">catch (PDOException $e) $stmt</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= <a class="code" href="_smarthome_8php.html#a1fa3127fc82f96b1436d871ef02be319">$db</a>-&gt;prepare(<span class="stringliteral">&#39;SELECT sensorType.Id &#39;</span>.</div><div class="line">                         <span class="stringliteral">&#39;FROM sensorData &#39;</span>.</div><div class="line">                         <span class="stringliteral">&#39;JOIN sensor ON sensorData.sensorId=sensor.id &#39;</span>.</div><div class="line">                         <span class="stringliteral">&#39;JOIN sensorType ON sensorType.Id=sensorTypeId &#39;</span>.</div><div class="line">                         <span class="stringliteral">&#39;WHERE sensorData.locationId=? &#39;</span>.</div><div class="line">                         <span class="stringliteral">&#39;AND time BETWEEN ? AND ? &#39;</span>.</div><div class="line">                         <span class="stringliteral">&#39;GROUP BY sensorType.Id;&#39;</span>)</div><div class="ttc" id="_smarthome_8php_html_a1fa3127fc82f96b1436d871ef02be319"><div class="ttname"><a href="_smarthome_8php.html#a1fa3127fc82f96b1436d871ef02be319">$db</a></div><div class="ttdeci">$db</div><div class="ttdoc">database name </div><div class="ttdef"><b>Definition:</b> <a href="_smarthome_8php_source.html#l00034">Smarthome.php:34</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="index_8php_source.html#l00079">79</a> of file <a class="el" href="index_8php_source.html">index.php</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abe4cc9788f52e49485473dc699537388"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">try</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">{</div><div class="line">        <a class="code" href="_smarthome_8php.html#a1fa3127fc82f96b1436d871ef02be319">$db</a> = <span class="keyword">new</span> PDO(<span class="stringliteral">&#39;mysql:host=&#39;</span>.<a class="code" href="_smarthome_8php.html#ad0ddb2725e69c88a729e0cc242a1b2a6">$dbHost</a>.<span class="stringliteral">&#39;;dbname=&#39;</span>.<a class="code" href="_smarthome_8php.html#a1fa3127fc82f96b1436d871ef02be319">$db</a>, <a class="code" href="_dummy-_confidential_8php.html#a4a92606de85aafdc0dcae4976b7ca669">$dbUser</a>, <a class="code" href="_dummy-_confidential_8php.html#a6f8fc91e86a848503ae0dfc3c981ed12">$dbPw</a>)</div><div class="ttc" id="_dummy-_confidential_8php_html_a4a92606de85aafdc0dcae4976b7ca669"><div class="ttname"><a href="_dummy-_confidential_8php.html#a4a92606de85aafdc0dcae4976b7ca669">$dbUser</a></div><div class="ttdeci">$dbUser</div><div class="ttdoc">database user </div><div class="ttdef"><b>Definition:</b> <a href="_dummy-_confidential_8php_source.html#l00026">Dummy-Confidential.php:26</a></div></div>
+<div class="ttc" id="_smarthome_8php_html_ad0ddb2725e69c88a729e0cc242a1b2a6"><div class="ttname"><a href="_smarthome_8php.html#ad0ddb2725e69c88a729e0cc242a1b2a6">$dbHost</a></div><div class="ttdeci">$dbHost</div><div class="ttdoc">name of the MySQL server </div><div class="ttdef"><b>Definition:</b> <a href="_smarthome_8php_source.html#l00033">Smarthome.php:33</a></div></div>
+<div class="ttc" id="_dummy-_confidential_8php_html_a6f8fc91e86a848503ae0dfc3c981ed12"><div class="ttname"><a href="_dummy-_confidential_8php.html#a6f8fc91e86a848503ae0dfc3c981ed12">$dbPw</a></div><div class="ttdeci">$dbPw</div><div class="ttdoc">database password </div><div class="ttdef"><b>Definition:</b> <a href="_dummy-_confidential_8php_source.html#l00027">Dummy-Confidential.php:27</a></div></div>
+<div class="ttc" id="_smarthome_8php_html_a1fa3127fc82f96b1436d871ef02be319"><div class="ttname"><a href="_smarthome_8php.html#a1fa3127fc82f96b1436d871ef02be319">$db</a></div><div class="ttdeci">$db</div><div class="ttdoc">database name </div><div class="ttdef"><b>Definition:</b> <a href="_smarthome_8php_source.html#l00034">Smarthome.php:34</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="index_8php_source.html#l00069">69</a> of file <a class="el" href="index_8php_source.html">index.php</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adebef4d8af839861779ccfc1bd6d74f2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">while</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= <a class="code" href="_smarthome_8php.html#a1fa3127fc82f96b1436d871ef02be319">$db</a>-&gt;prepare(<span class="stringliteral">&#39;SELECT sensorId, &#39;</span>.</div><div class="line">                            <span class="stringliteral">&#39;MIN(value) AS value1, &#39;</span>.</div><div class="line">                            <span class="stringliteral">&#39;MAX(value) AS value2 &#39;</span>.</div><div class="line">                         <span class="stringliteral">&#39;FROM sensorData &#39;</span>.</div><div class="line">                         <span class="stringliteral">&#39;WHERE locationId=? &#39;</span>.</div><div class="line">                         <span class="stringliteral">&#39;GROUP BY sensorId DESC&#39;</span>)</div><div class="ttc" id="_smarthome_8php_html_a1fa3127fc82f96b1436d871ef02be319"><div class="ttname"><a href="_smarthome_8php.html#a1fa3127fc82f96b1436d871ef02be319">$db</a></div><div class="ttdeci">$db</div><div class="ttdoc">database name </div><div class="ttdef"><b>Definition:</b> <a href="_smarthome_8php_source.html#l00034">Smarthome.php:34</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="index_8php_source.html#l00090">90</a> of file <a class="el" href="index_8php_source.html">index.php</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>RoomSensor: server/Dummy-Confidential.php File Reference</title>
+<title>RoomSensor: sensorMapping_t Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -42,8 +42,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li><a href="annotated.html"><span>Classes</span></a></li>
-      <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -64,8 +64,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="files.html"><span>File&#160;List</span></a></li>
-      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
+      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -82,39 +83,40 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_41e1742e44e2de38b3bc91f993fed282.html">server</a></li>  </ul>
-</div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#var-members">Variables</a>  </div>
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="structsensor_mapping__t-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Dummy-Confidential.php File Reference</div>  </div>
+<div class="title">sensorMapping_t Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><a href="_dummy-_confidential_8php_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a4a92606de85aafdc0dcae4976b7ca669"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4a92606de85aafdc0dcae4976b7ca669"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_dummy-_confidential_8php.html#a4a92606de85aafdc0dcae4976b7ca669">$dbUser</a> = &quot;user&quot;</td></tr>
-<tr class="memdesc:a4a92606de85aafdc0dcae4976b7ca669"><td class="mdescLeft">&#160;</td><td class="mdescRight">database user <br /></td></tr>
-<tr class="separator:a4a92606de85aafdc0dcae4976b7ca669"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f8fc91e86a848503ae0dfc3c981ed12"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6f8fc91e86a848503ae0dfc3c981ed12"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_dummy-_confidential_8php.html#a6f8fc91e86a848503ae0dfc3c981ed12">$dbPw</a> = &quot;password&quot;</td></tr>
-<tr class="memdesc:a6f8fc91e86a848503ae0dfc3c981ed12"><td class="mdescLeft">&#160;</td><td class="mdescRight">database password <br /></td></tr>
-<tr class="separator:a6f8fc91e86a848503ae0dfc3c981ed12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a2715f016a14c06af08e1c6a755919190"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2715f016a14c06af08e1c6a755919190"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsensor_mapping__t.html#a2715f016a14c06af08e1c6a755919190">sensorId</a></td></tr>
+<tr class="memdesc:a2715f016a14c06af08e1c6a755919190"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sensor ID which corresponds to the sensorID in the database. <br /></td></tr>
+<tr class="separator:a2715f016a14c06af08e1c6a755919190"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0b8c8b4165e4855d1d16de339f38c5f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0b8c8b4165e4855d1d16de339f38c5f"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsensor_mapping__t.html#ab0b8c8b4165e4855d1d16de339f38c5f">device</a></td></tr>
+<tr class="memdesc:ab0b8c8b4165e4855d1d16de339f38c5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index in array sensorInfo. <br /></td></tr>
+<tr class="separator:ab0b8c8b4165e4855d1d16de339f38c5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdbdbb75b6731d84a121989da69c98b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acdbdbb75b6731d84a121989da69c98b1"></a>
+<a class="el" href="_room_sensor_8ino.html#a469b8ee4ebfb6e0a69ae14100b9a3cca">sensorType_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsensor_mapping__t.html#acdbdbb75b6731d84a121989da69c98b1">sensorType</a></td></tr>
+<tr class="memdesc:acdbdbb75b6731d84a121989da69c98b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of sensor. <br /></td></tr>
+<tr class="separator:acdbdbb75b6731d84a121989da69c98b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Markus Nickels </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.0</dd></dl>
-<p>Confidential declarations for server scripts, this file should be renamed to Confidential.php </p>
+<div class="textblock"><p>structure, where the mapping from devices to sensors is stored</p>
+<p>This mapping takes into account that many sensors could be connected to one device on the one wire bus, e.g. a 4 channel A/D converter </p>
 
-<p>Definition in file <a class="el" href="_dummy-_confidential_8php_source.html">Dummy-Confidential.php</a>.</p>
-</div></div><!-- contents -->
+<p>Definition at line <a class="el" href="_room_sensor_8ino_source.html#l00136">136</a> of file <a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a>.</p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<li><a class="el" href="_room_sensor_8ino_source.html">RoomSensor.ino</a></li>
+</ul>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

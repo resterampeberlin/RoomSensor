@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['host',['host',['../_room_sensor_8ino.html#ae032e164f1daa754d6fbb79d59723931',1,'RoomSensor.ino']]]
+  ['device',['device',['../structsensor_mapping__t.html#ab0b8c8b4165e4855d1d16de339f38c5f',1,'sensorMapping_t']]]
 ];
